@@ -55,7 +55,7 @@ def floatbot_Dynamics_rk4(x,u):
     return xn
 
 # reference and A linearization point
-r = np.array([100, -100, 0])           # pose
+r = np.array([100, 100, 45])             # pose
 v = np.array([0, 0, 0])                 # velocity
 x = np.reshape(np.append(r, v), (6, 1))
 # x = np.array([[0], [0], [np.pi], [0], [0], [0]])
@@ -122,9 +122,9 @@ def dlqr_calculate(G, H, Q, R, returnPE=False):
     eigs = np.array([eigvals(G-H@K)]).T
     return K, P, eigs
 
-#discrete ricacati solution
+# discrete ricacati solution for control gains
 dK, dP, deigs = dlqr_calculate(dA, dB, Q, R, True)   # set to true to return K, P and eigs 
-# print(dK)
+print(dK)
 
 # print(np.matmul(-dK, [0, 0, 5, 0, 0, 0]))
 # print(np.shape(np.reshape(np.matmul(-dK, [0, 0, 5, 0, 0, 0]), (3, 1))))
@@ -156,9 +156,18 @@ def controller(x):
 
 # Kalman filter
 
-C = [1, 1, 1, 0, 0, 1]
+# Vd = []     # disturbance covariance 
+# Vn = []     # noise covariance 
 
-xhat = dA*xhat_k + dB*u_k + L*(y - C*xhat_k)
+# C = [[1, 0, 0, 0, 0, 0],
+#      [0, 1, 0, 0, 0, 0],
+#      [0, 0, 1, 0, 0, 0],
+#      [0, 0, 0, 0, 0, 1]]
+
+# # discrete ricacati solution for kalman filter gains
+# dL, dP, deigs = dlqr_calculate(dA, dB, Q, R, True)   # set to true to return K, P and eigs 
+
+# xhat = dA*xhat_k + dB*u_k + dL*(y - C*xhat_k)
 
 
 
@@ -193,7 +202,7 @@ uhist = np.zeros((np.size(u0), t_steps))
 # print(uhist[:,0].shape)
 
 for x in range(t_steps):
-    uhist[:,x] = controller(xhist[:,x] + np.random.rand(6))   # added state purterbations for fun
+    uhist[:,x] = controller(xhist[:,x]) #+ np.random.rand(6))   # added state purterbations for fun
     xhist[:,x+1] = floatbot_Dynamics_rk4(xhist[:,x], uhist[:,x])
 
 # print(np.shape(xhist))
@@ -251,7 +260,7 @@ for x in range(t_steps):
 # floatbot.speed(3)
 
 # for i in range(t_steps):
-#     floatbot.goto(xhist[0, i], xhist[1, i])
 #     floatbot.setheading(xhist[2, i])
+#     floatbot.goto(xhist[0, i], xhist[1, i])
 
 # turtle.done()
