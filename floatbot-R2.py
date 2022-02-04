@@ -1,3 +1,4 @@
+
 from cmath import pi
 import auto_diff
 # import control
@@ -70,12 +71,12 @@ def floatbot_Dynamics_rk4(x,u):
     return xn
 
 # reference and A linearization point
-r = np.array([100, 100, 40])             # pose
-v = np.array([0, 0, 0])                 # velocity
+r = np.array([0, 0, 0])                 # pose
+v = np.array([0, 0, 1])                 # velocity
 x = np.reshape(np.append(r, v), (6, 1))
 
 # control and B linearization point
-u = np.reshape(np.zeros(3), (3, 1))
+u = np.array([[0], [0], [0]])   # or can use reshape, i think this way is faster
 
 def continousSys(x, u):
     with auto_diff.AutoDiff(x, u) as (x, u):
@@ -92,7 +93,10 @@ def discreteSys(x, u):
 dz, dA, dB = discreteSys(x, u)
 
 Q = np.eye(6)   # state weights
-R = np.eye(3)   # control weights
+# R = 0.05*np.eye(3)   # control weights
+R = np.array([[1, 0, 0], 
+              [0, 1, 0], 
+              [0, 0, 1]])
 
 #continuous ricacati solution
 cK, cS, cE = lqr(cA, cB, Q, R)    # A and B doesn't take into account the zero order hold from integration
@@ -142,11 +146,11 @@ def controller(x):
     rNext = x[0:3]
     vNext = x[3:7]
 
-    deltaX = np.reshape(np.append(rNext - r, vNext- v), (6, 1)) # shape (6,1)
+    deltaX = np.reshape(np.append(rNext - r, vNext - v), (6, 1)) # shape (6,1)
 
-    u = np.reshape(-np.matmul(dK, deltaX), 3)  # numpy matrix multiplication - shape (3,)
+    uK = np.reshape(-np.matmul(dK, deltaX), 3) + np.reshape(u, 3)  # numpy matrix multiplication - shape (3,)
 
-    return u
+    return uK
 
 """ LQR controller """
 
@@ -195,20 +199,20 @@ plant = np.zeros((np.size(x0), t_steps+1))  # acting as the actual system=
 sens = np.zeros((np.size(x0), t_steps+1))   # acting as the sensor measurement - initial condition is same as plant
 xhat = np.zeros((np.size(x0), t_steps+1))   # estimated states vx,vy,omega
 
-# xhist[:, 0] = [0, 0, 0, 0, 0, 0]  # change initial condition 
+plant[:, 0] = [0, 0, 0, 0, 0, 0]  # change initial condition
 
 for x in range(t_steps):
-    uhist[:,x] = controller(plant[:,x]) #+ np.random.randn(6)*0.75)                                 
+    uhist[:,x] = controller(plant[:,x]) #+ np.random.randn(6)*0.75)                                                                
     # pretend this is the actual plant with external disturbances/model uncertainty/process noise etc.
-    plant[:,x+1] = floatbot_Dynamics_rk4(plant[:,x], uhist[:,x]) + np.random.randn(6)*0.75
-    sens[:,x+1] = np.matmul(C_pose, plant[:,x+1] + np.random.randn(6)*0.75)                     # sensor noise
+    plant[:,x+1] = floatbot_Dynamics_rk4(plant[:,x], uhist[:,x]) #+ np.random.randn(6)*0.05
+    sens[:,x+1] = np.matmul(C_pose, plant[:,x+1]) #+ np.random.randn(6)*0.01)                     # sensor noise
     xhat[:,x+1] = plant[:,x+1] + np.matmul(np.transpose(dL), (sens[0:3,x+1] - np.matmul(C_sens, plant[:,x+1])))  # kalman filter
 
-print(plant[:,60])
-print()
-print(sens[:,60])
-print()
-print(xhat[:,60])
+# print(plant[:,60])
+# print()
+# print(sens[:,60])
+# print()
+# print(xhat[:,60])
 
 # print(dL)
 # print()
@@ -216,6 +220,11 @@ print(xhat[:,60])
 # print()
 # print(np.transpose(dL))
 
+sumT = 0
+for x in range(1000):
+    sumT += uhist[2,x] 
+
+print(sumT)
 
 
 
@@ -230,19 +239,26 @@ print(xhat[:,60])
 
 """ floatbot state plots """
 
-# import plotly.graph_objects as go
+import plotly.graph_objects as go
 
-# t = np.linspace(0, t_steps, num=t_steps, dtype=int)
-# fig = go.Figure()
-# fig.add_trace(go.Scatter(x=t, y=xhist[0,t], mode='lines', name='x position'))
-# fig.add_trace(go.Scatter(x=t, y=xhist[1,t], mode='lines', name='y position'))
-# fig.add_trace(go.Scatter(x=t, y=xhist[2,t], mode='lines', name='theta position'))
+t = np.linspace(0, t_steps, num=t_steps, dtype=int)
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=t, y=plant[0,t], mode='lines', name='x position'))
+fig.add_trace(go.Scatter(x=t, y=plant[1,t], mode='lines', name='y position'))
+fig.add_trace(go.Scatter(x=t, y=plant[2,t], mode='lines', name='theta position'))
+fig.add_trace(go.Scatter(x=t, y=plant[3,t], mode='lines', name='vx'))
+fig.add_trace(go.Scatter(x=t, y=plant[4,t], mode='lines', name='vy'))
+fig.add_trace(go.Scatter(x=t, y=plant[5,t], mode='lines', name='angular rate'))
 
-# fig.update_layout(title='Floatbot States vs Time',
-#                    xaxis_title='Time',
-#                    yaxis_title='States')
+# fig.add_trace(go.Scatter(x=t, y=uhist[0,t-1], mode='lines', name='fx'))
+# fig.add_trace(go.Scatter(x=t, y=uhist[1,t-1], mode='lines', name='fy'))
+fig.add_trace(go.Scatter(x=t, y=uhist[2,t-1], mode='lines', name='torque'))
 
-# fig.show()
+fig.update_layout(title='Floatbot States vs Time',
+                   xaxis_title='Time',
+                   yaxis_title='States')
+
+fig.show()
 
 """ floatbot state plots """
 
@@ -250,26 +266,26 @@ print(xhat[:,60])
 
 """ floatbot animation """
 
-# from turtle import *
-# import turtle
+from turtle import *
+import turtle
 
-# screen = Screen()
-# screen.setup(500, 500)
+screen = Screen()
+screen.setup(500, 500)
 
-# # turtle object
-# floatbot = turtle.Turtle()
+# turtle object
+floatbot = turtle.Turtle()
 
-# # turtle paramenters
-# floatbot.shapesize(2, 2, 2)
-# floatbot.pensize(2)
+# turtle paramenters
+floatbot.shapesize(2, 2, 2)
+floatbot.pensize(2)
 
-# # 1-10 speed range
-# floatbot.speed(0)
+# 1-10 speed range
+floatbot.speed(0)
 
-# for i in range(t_steps):
-#     floatbot.setheading(xhist[2, i])
-#     floatbot.goto(xhist[0, i], xhist[1, i])
+for i in range(t_steps):
+    floatbot.setheading(plant[2, i])
+    floatbot.goto(plant[0, i], plant[1, i])
 
-# turtle.done()
+turtle.done()
 
 """ floatbot animation """
