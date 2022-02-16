@@ -1,11 +1,132 @@
-# import keyboard
-import math
-import auto_diff
+import time
 import numpy as np
 
-import hellowrld
 
-hellowrld.helloworld
+xhat = np.array([[5], [9]])
+
+print(xhat[0][0])
+
+
+
+# print(np.zeros((2,2)))
+# print(np.eye(2))
+
+
+
+# print(np.array([[0.001, 0], [0.0, 0.003]]))
+
+# a = np.array([[1, 2], [3, 4]])
+# b = np.array([[1, 2], [3, 4]])
+# c = np.array([[1, 2], [3, 4]])
+
+# d = a@b@c
+# print(d)
+# e = a.dot(b).dot(c)
+# print(d)
+# f = np.linalg.multi_dot([a, np.transpose(b), c])
+# print(f)
+
+
+
+# a = np.array([[5], [9]])
+# print(np.shape(np.array([[1, 0]])))
+# r = 6
+# D = np.array([[1], [3]])
+
+# print(np.matmul(D, a))
+# print(D*a)
+# print(a*2)
+# print(np.shape(a[1]))
+
+# b = [a[1]+a[1]]
+# p = np.array([b, [r]])
+
+# print(b[0][0])
+# print(np.array([9]))
+
+
+
+# start = time.time()
+# print("Give the IMU some time")
+# time.sleep(0.001)
+# end = time.time()
+# print("Starting gyro calibration process... wait time:",end - start, "sec")
+
+
+
+
+# start = time.time()
+# while True:
+#     t_since_epoch = round(time.time() - start)
+#     print(t_since_epoch)
+#     time.sleep(1)
+
+#     if t_since_epoch == 5:
+#         break
+
+# print(t_since_epoch)
+
+
+
+
+# a = np.zeros((3, 6))
+# a[0, 0] = 5
+# a[1, 1] = 5
+# a[2, 2] = 5
+
+# b = a[0, :]
+# c = [70, 9]
+# print(c)
+
+
+# averaging elements of an array
+# def Average(arr): 
+#     avg = sum(a[0, :]) / len(a[0, :]) 
+#     return avg
+# avg = sum(a[0, :]) / len(a[0, :])
+# print(avg)
+
+
+
+# getting time step
+# t0 = time.time()
+# i = 0
+# while True:
+#     # tk = time.time()
+#     # time.sleep(0.01)
+#     # tkn = time.time()
+#     # dt = tkn - tk
+#     # print(dt)
+
+#     time.sleep(0.5)
+
+#     i += i + 1
+#     print(i)
+
+
+#     if time.time()-t0 > 5:
+#         break
+
+# print(i)
+
+
+
+
+
+
+
+
+
+
+
+# # import keyboard
+# import math
+# import auto_diff
+# import numpy as np
+
+# import hellowrld
+
+# hellowrld.helloworld
 
 
 
@@ -35,9 +156,9 @@ hellowrld.helloworld
 # # r = x*x + np.array([x[1], x[1]])
 # # print(r)
 
-def testFunc(x, u):
-    z = x*x + np.array([x[1], x[1]])*np.array([x[1], x[1]]) + u*u
-    return z
+# def testFunc(x, u):
+#     z = x*x + np.array([x[1], x[1]])*np.array([x[1], x[1]]) + u*u
+#     return z
 
 
 # print(testFunc(x))
@@ -48,14 +169,14 @@ def testFunc(x, u):
 #         z, Jf = auto_diff.get_value_and_jacobian(f_eval)
 #     return z, Jf
 
-with auto_diff.AutoDiff(x, u) as (x, u):
-    f_eval = testFunc(x, u)
-    z, (A, B) = auto_diff.get_value_and_jacobians(f_eval)
+# with auto_diff.AutoDiff(x, u) as (x, u):
+#     f_eval = testFunc(x, u)
+#     z, (A, B) = auto_diff.get_value_and_jacobians(f_eval)
 
 # z, Jf = linearize_Sys(x)
 
 
-print(f_eval)
+# print(f_eval)
 # print(z)
 # print('A matrix: ')
 # print(A)
@@ -85,5 +206,3 @@ print(f_eval)
 #     if keyboard.read_key() == "p":
 #         print("You pressed p")
 #         break
-
-
