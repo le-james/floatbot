@@ -23,6 +23,8 @@ try:
         GPIO.output(3, GPIO.LOW)
         print('Relay 2 OFF')
         time.sleep(2)
+except KeyboardInterrupt:   #ctrl-c
+    print("Cleaning up GPIO")
 finally:
     GPIO.cleanup()
 
