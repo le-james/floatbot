@@ -8,6 +8,7 @@ mpu = mpu6050(0x68)
 # set initial yaw angle
 yawAng = 0
 prevBias = 0
+gyroUpdateRate = 0.05   # 50ms
 
 """ pull gyro readings """
 start = time.time()
@@ -28,8 +29,10 @@ try:
         # print(gyro_data['z']+0.319)   
 
         dt = endTime-getTime    # 3ms to get gyro data <- 1/3ms = 333Hz
+        h = gyroUpdateRate - dt
+        time.sleep(h)
 
-        yawAng += (gyro_data['z']+0.2)*dt
+        yawAng += (gyro_data['z']+0.35)*h #0.2)*dt
         # yawAng += (gyro_data['z']+0.23)*dt - prevBias*dt
         # prevBias = gyro_data['z']
 
