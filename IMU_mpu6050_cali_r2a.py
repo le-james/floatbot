@@ -1,3 +1,4 @@
+from html import entities
 from time import sleep, time
 from mpu6050 import mpu6050
 
@@ -7,7 +8,7 @@ mpu = mpu6050(0x68)
 """ pull gyro readings """
 print("Calibrating Gyro Yaw (z-axis)... ")
 count = 0
-gyroReadings = 10000     # number of gyro data to pull
+gyroReadings = 420     # number of gyro data to pull
 sumZGyroReadings = 0
 gyroZBias = 0
 while True:
@@ -19,7 +20,7 @@ while True:
 
     # summming z gyro readings
     sumZGyroReadings += gyro_data['z']
-
+    
     # once pulled enough gyro readings
     if count == gyroReadings:
         gyroZBias = sumZGyroReadings/count
@@ -37,22 +38,23 @@ sleep(5)
 """ pull gyro readings """
 # set initial yaw angle
 yawAng = 0
+gyroUpdateRate = 0.05   # 50ms
+dt = gyroUpdateRate
+prevYawRate = 0
 print("Starting gyro... ")
 try:
     while True:
-        # delta t to get gyro readings
-        getTime = time()
-        gyro_data = mpu.get_gyro_data()
-        endTime = time()  
-
-        # 3ms to get gyro data <- 1/3ms = 333Hz
-        dt = endTime-getTime
-        # dt = 0.01
-
-        # yaw angle integration
-        yawAng += (gyro_data['z']+gyroZBias)*dt
-
+        startTime = time()                     # start loop time
+        gyro_data = mpu.get_gyro_data()        # get yaw rate
+        yawAng += (gyro_data['z']+gyroZBias)*dt   # yaw angle integration
+        # prevYawRate = gyro_data['z']           # store yaw rate for next time step  
         print(yawAng)
+        endTime = time()                      # time after getting rate
+
+        dtGyro = endTime - startTime          # gyro process time
+        # print(dtGyro)
+
+        sleep(gyroUpdateRate - dtGyro)          # wait until next time step
 
 except KeyboardInterrupt:
     print('Exited angle readings')

@@ -6,7 +6,7 @@ import csv
 mpu = mpu6050(0x68)
 
 # number of seconds to pull gyro data for
-t = 120
+t = 60
 
 # gyro values
 gyro_vals = np.zeros((3, t+1))

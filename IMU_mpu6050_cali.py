@@ -2,13 +2,14 @@ from mpu6050 import mpu6050
 
 mpu = mpu6050(0x68)
 
-""" GYRO Z-AXIS CALIBRATION CODE """
 
+
+""" GYRO Z-AXIS CALIBRATION CODE """
 
 """ pull gyro readings """
 print("Calibrating Gyro Yaw (z-axis)... ")
 count = 0
-gyroReadings = 50     # number of gyro data to pull
+gyroReadings = 420     # number of gyro data to pull
 sumZGyroReadings = 0
 while True:
     # counter to end while loop
@@ -27,6 +28,5 @@ while True:
         print("Gyro yaw bias (z-axis) is: ", gyroZBias)
         break
 """ pull gyro readings """
-
 
 """ GYRO Z-AXIS CALIBRATION CODE """
