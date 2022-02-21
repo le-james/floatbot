@@ -2,9 +2,22 @@ import time
 import numpy as np
 
 
-xhat = np.array([[5], [9]])
+arr = np.array([11, 12, 13, 14, 15, 16, 17, 15, 11, 12, 14, 15, 16, -17, 20])
 
-print(xhat[0][0])
+A = np.amax(arr)
+print(A)
+B = np.amax(A)
+print(B)
+
+# gyro_vals = np.zeros((1, 420))
+
+# print(gyro_vals[0, 10])
+
+
+
+# xhat = np.array([[5], [9]])
+
+# print(xhat[0][0])
 
 
 
