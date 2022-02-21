@@ -1,4 +1,3 @@
-from html import entities
 from time import sleep, time
 from mpu6050 import mpu6050
 
@@ -46,7 +45,7 @@ try:
     while True:
         startTime = time()                     # start loop time
         gyro_data = mpu.get_gyro_data()        # get yaw rate
-        yawAng += (gyro_data['z']+gyroZBias)*dt   # yaw angle integration
+        yawAng += (gyro_data['z']-gyroZBias)*dt   # yaw angle integration
         # prevYawRate = gyro_data['z']           # store yaw rate for next time step  
         print(yawAng)
         endTime = time()                      # time after getting rate
