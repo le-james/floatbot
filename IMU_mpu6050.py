@@ -3,10 +3,12 @@ from time import sleep, time
 
 mpu = mpu6050(0x68)
 
+
+
 """ GYRO Z-AXIS CALIBRATION CODE """
 print("Calibrating Gyro Yaw (z-axis)... ")
 count = 0
-gyroReadings = 420     # number of gyro data to pull
+gyroReadings = 1000     # number of gyro data to pull
 sumZGyroReadings = 0
 while True:
     # counter to end while loop
@@ -22,14 +24,14 @@ while True:
     if count == gyroReadings:
         gyroZBias = sumZGyroReadings/count
         print("Read", gyroReadings, "gyro readings")
-        sleep(1.5)
+        sleep(1)
         print("Gyro yaw bias (z-axis) is: ", gyroZBias)
         break
 """ GYRO Z-AXIS CALIBRATION CODE """
 
 # break to read calibration details
-print("5 seconds before starting gyro integration")
-sleep(5)
+print("1 seconds before starting gyro integration")
+sleep(1)
 
 """ pull gyro readings """
 # gyro inital conditions

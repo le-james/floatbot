@@ -1,13 +1,32 @@
 import time
-import numpy as np
+# import numpy as np
+from numpy import zeros
 
 
-arr = np.array([11, 12, 13, 14, 15, 16, 17, 15, 11, 12, 14, 15, 16, -17, 20])
+# u = 10
+# a = u if u > 0.01 else 0
+# print(a)
 
-A = np.amax(arr)
-print(A)
-B = np.amax(A)
-print(B)
+floatbot_pose = zeros(3)
+# floatbot_pose[0] = 2
+# floatbot_pose[1] = 5
+print(floatbot_pose)
+
+# leds = [5, 6, 12, 13, 16, 26]
+
+# for led in leds:
+#     print(led)
+
+
+
+# arr = np.array([11, 12, 13, 14, 15, 16, 17, 15, 11, 12, 14, 15, 16, -17, 20])
+
+# print(arr-5)
+
+# A = np.amax(arr)
+# print(A)
+# B = np.amax(A)
+# print(B)
 
 # gyro_vals = np.zeros((1, 420))
 
