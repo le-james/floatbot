@@ -1,5 +1,6 @@
 from marvelmind import MarvelmindHedge
 from mpu6050 import mpu6050
+import RPi.GPIO as GPIO
 import numpy as np
 import threading
 import time
@@ -155,4 +156,7 @@ try:
         # sleep
 
 except KeyboardInterrupt:
+    GPIO.cleanup()
+    print("CLEANED UP GPIO")
+    time.sleep(1)
     print('TERMINATED CONTROL LOOP')
