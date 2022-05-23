@@ -5,7 +5,7 @@ from serial import Serial
 import sys
 
 #Define GPS Hedgehog object, need to check the port
-hedge = MarvelmindHedge(tty = "/dev/ttyACM1", adr = None, debug = False)
+hedge = MarvelmindHedge(tty = "/dev/ttyACM0", adr = None, debug = False)
 hedge.start()
 
 #Define serial object (Arduino)
