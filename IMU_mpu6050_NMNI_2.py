@@ -49,7 +49,6 @@ gyro_data = 0.0         # set initial gyro rate
 gyroUpdateRate = 0.01   # 10ms == 100Hz update rate
 prev_gryo_data = 0.0
 
-start = time()
 try:
     while True:
         startTime = time()
