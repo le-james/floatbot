@@ -1,16 +1,65 @@
 import time
-# import numpy as np
-from numpy import zeros
+# Import matplotlib, numpy and math
+import matplotlib.pyplot as plt
+import numpy as np
+  
+
+
+x = 1
+y = 5
+x = 10
+
+u[0] = x
+
+
+
+
+
+# # thruster gpio pins
+# thrusters = [17, 27, 22, 10, 9, 11, 5, 6]
+
+# for i in thrusters:
+#     print(i)
+
+
+# fireTimes = np.array([[1], [0], [0], [0], [0], [0], [0], [0]])
+# print(fireTimes[1][0])
+
+# flag = 1
+
+# while flag:
+#     print("hello")
+#     flag = 0
+
+
+# x = np.linspace(-10, 10, 100)
+# z = 1/(1 + np.exp(-x))
+# # c1 = 0.5
+# # c2 = 0.3
+# # z = 1/(1 + np.exp(-c1*(x-c2)))
+  
+# plt.plot(x, z)
+# plt.xlabel("x")
+# plt.ylabel("Sigmoid(X)")
+  
+# plt.show()
+
+
+
+# a = [1, 2 ,3]
+
+# print(a)
+
 
 
 # u = 10
 # a = u if u > 0.01 else 0
 # print(a)
 
-floatbot_pose = zeros(3)
+# floatbot_pose = zeros(3)
 # floatbot_pose[0] = 2
 # floatbot_pose[1] = 5
-print(floatbot_pose)
+# print(floatbot_pose)
 
 # leds = [5, 6, 12, 13, 16, 26]
 
