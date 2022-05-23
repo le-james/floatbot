@@ -1,30 +1,26 @@
 import RPi.GPIO as GPIO
 import threading
 import time
+import numpy as np
 
-# set gpio pin mode
-GPIO.setmode(GPIO.BCM)
 
 # thruster gpio pins
 thrusters = [17, 27, 22, 10, 9, 11, 0, 5]
 
 # setup thruster gpio pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(thrusters, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(thrusters, GPIO.OUT, initial=GPIO.HIGH)  # relays OFF
 
+def fire_thruster(pin, name, fireTimes):
+    dt = fireTimes if fireTimes > 0.01 else 0
 
-def thruster_control(u):
+    GPIO.output(pin, GPIO.LOW)
+    print(name, 'ON')
+    time.sleep(dt)
+    GPIO.output(pin, GPIO.HIGH)
+    print(name, 'OFF')
 
-    def fire_thruster(pin, name, u):
-            dt = u if u > 0.01 else 0
-            
-            GPIO.output(pin, GPIO.HIGH)
-            print(name, 'ON')
-
-            time.sleep(dt)
-
-            GPIO.output(pin, GPIO.LOW)
-            print(name, 'OFF')
+def thruster_control(fireTimes):
 
     # create a list of threads
     thruster_threads_list = []
@@ -33,7 +29,7 @@ def thruster_control(u):
     for i in range(8):
         t = threading.Thread(target=fire_thruster, 
                              name="thruster{}".format(i+1), 
-                             args=(thrusters[i],"thruster{}".format(i),u[i]))
+                             args=(thrusters[i],"thruster{}".format(i+1),fireTimes[i][0]))
         thruster_threads_list.append(t)     # append threads into list
         t.start()   # start thread
         print(t.name, "has started")
@@ -44,4 +40,14 @@ def thruster_control(u):
 
 
 
+# testing
+# fireTimes = [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
+# fireTimes = [1, 2, 3, 4, 5, 6, 7, 8]
+fireTimes = np.array([[1], [1], [1], [1], [1], [1], [1], [1]])     # pose from gps and imu
+
+thruster_control(fireTimes)
+
+print("all thrusters fired")
+
+# GPIO.cleanup()
 
