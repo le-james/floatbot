@@ -216,7 +216,7 @@ def pid(nav, ref):
 
         # thruster fire time bounds
         t[t > 1] = 1
-        t[t < 0.1] = 0    # handled in fire thrust thread already
+        t[t < 0.1] = 0
     else:
         print("SOMETHING WRONG IN PID FUNCTION!")
 
@@ -233,7 +233,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(thrusters, GPIO.OUT, initial=GPIO.HIGH)  # relays OFF - reverse logic for some reason
 
 def fire_thruster(pin, name, fireTime):
-    # dt = fireTime if fireTime >= 0.1 else 0
+    # dt = fireTime if fireTime >= 0.1 else 0 - handled in pid thread already
     
     GPIO.output(pin, GPIO.LOW)
     # print(name, 'ON')
