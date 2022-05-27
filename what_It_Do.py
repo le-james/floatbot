@@ -2,17 +2,215 @@ import time
 # Import matplotlib, numpy and math
 import matplotlib.pyplot as plt
 import numpy as np
-  
+import keyboard
+
+ref = [0, 0, 0]
+check = ref     # copy shape of ref
+def isfloat(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
+def setpoint():    # user set the goal pose of the floatbot
+    while True:
+        for idx, val in enumerate(check):
+            if val == False:
+                if idx == 0:
+                    print("Re-enter x postion again...")
+                    ref[idx] = input("x position [cm]: ")
+                    check[idx] = isfloat(ref[idx])   
+                elif idx == 1:
+                    print("Re-enter y postion again...")
+                    ref[idx] = input("y position [cm]: ")
+                    check[idx] = isfloat(ref[idx])   
+                elif idx == 2:
+                    print("Re-enter yaw angle again...")
+                    ref[idx] = input("yaw angle [deg]: ")
+                    check[idx] = isfloat(ref[idx])   
+
+        if all(check) == True:
+            # convert into float and meter values
+            ref[0] = float(ref[0])/100
+            ref[1] = float(ref[1])/100
+            ref[2] = float(ref[2])
+            # print out where the floatbot will move to
+            print("The Floatbot will move to: " + "(" , ref[0], "," , ref[1], ")" 
+                    + " with angle: ", ref[2], " [deg]")
+            # userInCheck = False
+            break
 
 
-x = 1
-y = 5
-x = 10
+def resetMode():
+    global i
+    if keyboard.is_pressed('tab'):
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("Reset Mode: 3 options...")
+        print("1. Reinitilize IMU gyro integration to zero")
+        print("2. Set new goal pose")
+        print("3. Do both 1. and 2.")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        time.sleep(0.5)
+        option = input("Select option '1', '2' or '3' now and press enter: ")
+        
+        if option == '1':
+            i = 10
+        elif option == '2':
+            setpoint()
+        elif option == '3':
+            setpoint()
+            i = 0
+        else:
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            print("Did not choose an option 1. 2. or 3.")
+            print("Will continue as before entering Reset Mode")
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            print("Press the 'tab' key to continue...")
+            time.sleep(0.5)
+            keyboard.wait('tab')
 
-u[0] = x
+i = 0
+while True:
+    i += 1
+    print(i)
+    resetMode()
+    time.sleep(0.5)
 
 
 
+
+# i = 0
+
+# while True:
+#     i += 1
+#     print(i)
+
+#     if keyboard.is_pressed('space'):
+#         i = 0
+#         print(i)
+#         keyboard.wait('esc')
+
+#     time.sleep(0.5)
+
+
+
+
+# while True:
+#     if keyboard.read_key() == "p":
+#         print("You pressed p")
+#         break
+
+# while True:
+#     if keyboard.is_pressed("q"):
+#         print("You pressed q")
+#         break     
+
+
+
+
+
+# ref = [0, 0, 0]
+
+# # try:
+# #     while True:
+# #         print("Enter where the Floatbot should go and press enter...")
+# #         ref[0] = input("x position: ")
+# #         ref[1] = input("y position: ")
+# #         ref[2] = input("yaw angle: ")
+
+# # except:
+# #     print("Something went wrong")
+# # finally:
+# #     print("The Floatbot will move to: " + "(" + ref[0] + "," + ref[1] + ")" + " with angle: " + ref[2] + " [deg]")
+
+
+# # ref = [0.2, 0.9, 10]
+
+
+# def isfloat(num):
+#     try:
+#         float(num)
+#         return True
+#     except ValueError:
+#         return False
+
+# print("Enter where the Floatbot should go and press enter...")
+# ref[0] = input("x position [cm]: ")
+# ref[1] = input("y position [cm]: ")
+# ref[2] = input("yaw angle [deg]: ")
+
+# check = ref     # copy shape of ref
+
+# for idx, val in enumerate(ref):
+#     check[idx] = isfloat(val)   
+# # print("check ", check)
+# # print(all(check))
+
+# # checks if user input is valid
+# # userInCheck = True   # in user input mode
+
+# def userInput():
+#     while True:
+#         for idx, val in enumerate(check):
+#             if val == False:
+#                 if idx == 0:
+#                     print("Re-enter x postion again...")
+#                     ref[idx] = input("x position [cm]: ")
+#                     check[idx] = isfloat(ref[idx])   
+#                 elif idx == 1:
+#                     print("Re-enter y postion again...")
+#                     ref[idx] = input("y position [cm]: ")
+#                     check[idx] = isfloat(ref[idx])   
+#                 elif idx == 2:
+#                     print("Re-enter yaw angle again...")
+#                     ref[idx] = input("yaw angle [deg]: ")
+#                     check[idx] = isfloat(ref[idx])   
+
+#         if all(check) == True:
+#             # convert into float and meter values
+#             ref[0] = float(ref[0])/100
+#             ref[1] = float(ref[1])/100
+#             ref[2] = float(ref[2])
+#             # print out where the floatbot will move to
+#             print("The Floatbot will move to: " + "(" , ref[0], "," , ref[1], ")" 
+#                     + " with angle: ", ref[2], " [deg]")
+#             print("ref: ", ref)
+#             # userInCheck = False
+#             break
+# userInput()
+
+# print(isfloat(False))
+
+# ref = ["1.089", "", "a"]
+# # # ref[0] = float(ref[0])
+# # print(type(ref[0]))
+# print(isinstance(ref[0], float))
+# print(isfloat('12.5k'))
+
+# if isinstance(ref[0], float) == False:
+#     print("not float value")
+
+# def isfloat(num):
+#     try:
+#         float(num)
+#         return True
+#     except ValueError:
+#         return False
+
+# check = ref
+# for idx, val in enumerate(check):
+#     check[idx] = isfloat(val)
+# print(check)
+
+
+
+
+
+# x = 1
+# y = 5
+# x = 10
+
+# u[0] = x
 
 
 # # thruster gpio pins
